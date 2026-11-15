@@ -12,4 +12,12 @@ Photographiez une assiette : un modèle d'IA qui tourne dans le navigateur repè
 
 Le premier scan télécharge le modèle de reconnaissance (de l'ordre de 100 à 200 Mo, estimation non mesurée) : faites-le en Wi-Fi. Ensuite l'app fonctionne hors ligne.
 
+## Installer l'APK sur Android (sans GitHub Pages)
+
+Un APK est construit automatiquement par GitHub (onglet [Actions](https://github.com/Lounick03/test/actions), compter une dizaine de minutes la première fois) puis publié dans les [Releases](https://github.com/Lounick03/test/releases).
+
+1. Ouvrez [la dernière version](https://github.com/Lounick03/test/releases/latest) sur le téléphone et touchez **Assiette.apk** pour le télécharger.
+2. Ouvrez le fichier téléchargé et autorisez l'installation depuis votre navigateur quand Android le demande. Un avertissement Play Protect est normal : l'app n'est pas sur le Play Store.
+3. Pour installer une version plus récente, désinstallez d'abord l'ancienne (chaque APK est signé avec une clé de test propre à sa construction). Sauvegardez avant votre journal avec « Copier mon journal » dans les réglages.
+
 Détails, précision attendue et limites : [`docs/LISEZ-MOI.md`](docs/LISEZ-MOI.md).

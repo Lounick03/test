@@ -1,0 +1,88 @@
+name: Construire l'APK Android
+
+# Fabrique Assiette.apk à partir du dossier docs/ et le publie dans les « Releases » du dépôt.
+# Se lance tout seul quand docs/ change, ou à la demande (onglet Actions > Run workflow).
+on:
+  workflow_dispatch:
+  push:
+    branches: [test]
+    paths:
+      - 'docs/**'
+      - 'android-res/**'
+      - '.github/workflows/apk.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Créer le projet Android (Capacitor 7)
+        run: |
+          set -euxo pipefail
+          mkdir -p build/www
+          cp -r docs/. build/www/
+          rm -f build/www/LISEZ-MOI.md build/www/.nojekyll
+          cd build
+          npm init -y
+          npm install @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+          npx cap init "Assiette" "fr.assiette.app" --web-dir www
+          npx cap add android
+          # permission d'utiliser l'appareil photo (sans elle, « Prendre une photo » n'ouvrirait que la galerie)
+          sed -i 's#</manifest>#    <uses-permission android:name="android.permission.CAMERA" />\n</manifest>#' android/app/src/main/AndroidManifest.xml
+          grep -n "CAMERA" android/app/src/main/AndroidManifest.xml
+
+      - name: Icônes et écran de démarrage de l'app
+        continue-on-error: true
+        run: |
+          set -euxo pipefail
+          cd build/android/app/src/main/res
+          rm -rf mipmap-anydpi-v26
+          cp -r "$GITHUB_WORKSPACE"/android-res/mipmap-* .
+          find . -name 'splash.png' -exec cp "$GITHUB_WORKSPACE"/android-res/splash.png {} \;
+
+      - name: Compiler l'APK
+        run: |
+          set -euxo pipefail
+          cd build/android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon --stacktrace
+          cp app/build/outputs/apk/debug/app-debug.apk "$GITHUB_WORKSPACE/Assiette.apk"
+          ls -l "$GITHUB_WORKSPACE/Assiette.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Assiette-apk
+          path: Assiette.apk
+
+      - name: Publier dans les Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: apk-${{ github.run_number }}
+          name: Assiette, APK Android n° ${{ github.run_number }}
+          make_latest: true
+          files: Assiette.apk
+          body: |
+            **Assiette.apk** : l'application de suivi alimentaire par photo, 100 % sur l'appareil.
+
+            Installation sur Android :
+            1. Téléchargez `Assiette.apk` ci-dessous, puis ouvrez-le.
+            2. Android demande d'autoriser l'installation depuis votre navigateur : acceptez.
+            3. Si Play Protect affiche un avertissement, c'est normal : l'app n'est pas publiée sur le Play Store.
+
+            Au premier scan, l'app télécharge un modèle d'IA (de l'ordre de 100 à 200 Mo, estimation) : faites-le en Wi-Fi.
+
+            Mise à jour : chaque APK est signé avec une clé de test propre à sa construction. Pour installer une version plus récente, désinstallez d'abord l'ancienne. Avant cela, utilisez « Copier mon journal » dans les réglages : la désinstallation efface le journal.
