@@ -712,8 +712,27 @@ var ML_ROWS={
 var ML_BG=['an empty plate','a wooden table','a tablecloth','a paper napkin','cutlery, a fork and a knife','a person’s hand','a kitchen countertop','a dark background','an empty bowl','an empty drinking glass'];
 /* grammes par cm² d'assiette visible, selon le type d'aliment (épaisseur × densité, ordre de grandeur) */
 var GCM={F:1.3,V:1.0,L:0.25,R:0.8,M:2.0,B:0.6,U:2.5,D:1.4,Q:3.0,C:2.0,G:1.0,X:1.2,N:1.5};
-var ML_PROMPTS=FOODS.map(function(f){var r=ML_ROWS[f[0]];return 'a photo of '+(r?r[0]:norm(f[0]))+', a type of food.';}).concat(ML_BG.map(function(b){return 'a photo of '+b+'.';}));
+/* plusieurs formulations par aliment : leurs vecteurs sont moyennés (technique d'ensemble de requêtes de CLIP) */
+/* choisies sur le banc d'essai (bench/) : T2+T5, mesurées sur 880 photos de test indépendantes ; mêmes formulations pour les arrière-plans, comme mesuré */
+var ML_TPL=['a close-up photo of {} on a plate.','a photo of {}, a type of food, served on a plate.'];
+var ML_TPL_BG=ML_TPL;
+function mlTexts(){
+  var texts=[],counts=[],first=[];
+  FOODS.forEach(function(f){var r=ML_ROWS[f[0]],d=r?r[0]:norm(f[0]);ML_TPL.forEach(function(t,i){var x=t.replace('{}',d);texts.push(x);if(!i)first.push(x);});counts.push(ML_TPL.length);});
+  ML_BG.forEach(function(b){ML_TPL_BG.forEach(function(t,i){var x=t.replace('{}',b);texts.push(x);if(!i)first.push(x);});counts.push(ML_TPL_BG.length);});
+  return {texts:texts,counts:counts,first:first};
+}
+var ML_T=mlTexts();
+var ML_ALLTXT=ML_T.texts;
+var ML_PROMPTS=ML_T.first;   /* une requête principale par classe (aliments puis arrière-plans) */
 
+function mlAvgRows(all,counts,dim){            /* normalise chaque ligne, moyenne par classe, renormalise */
+  var n=counts.length,out=new Float32Array(n*dim),p=0,i,t,k;
+  mlNormRows(all,all.length/dim,dim);
+  for(i=0;i<n;i++){for(t=0;t<counts[i];t++){for(k=0;k<dim;k++)out[i*dim+k]+=all[(p+t)*dim+k];}p+=counts[i];}
+  mlNormRows(out,n,dim);
+  return out;
+}
 function mlNormRows(a,n,d){for(var i=0;i<n;i++){var o=i*d,s=0,k;for(k=0;k<d;k++)s+=a[o+k]*a[o+k];s=Math.sqrt(s)||1;for(k=0;k<d;k++)a[o+k]/=s;}}
 function mlProbs(img,txt,N,L,D){
   var out=[];
@@ -728,11 +747,39 @@ function mlProbs(img,txt,N,L,D){
 }
 /* probs[0] = photo entière, probs[1..9] = grille 3×3 du carré central.
    Retourne les aliments retenus (5 au plus) avec un poids estimé en grammes. */
+var LEARN_KEY='assiette.learn.v1';
+function learnRead(){try{var o=JSON.parse(localStorage.getItem(LEARN_KEY)||'null');if(o&&o.gl&&o.fd&&typeof o.gl.n==='number')return o;}catch(e){}return {gl:{n:0,m:0},fd:{}};}
+function learnWrite(o){try{localStorage.setItem(LEARN_KEY,JSON.stringify(o));}catch(e){}}
+/* facteur multiplicatif appliqué au poids estimé : moyenne (en log) des rapports « poids corrigé / poids estimé » de vos repas précédents,
+   par aliment, ramenée vers la moyenne générale quand on a peu d'exemples */
+function learnFactor(name,L){
+  if(!L||!L.gl||!L.fd)return 1;
+  var G=L.gl.n?L.gl.m*L.gl.n/(L.gl.n+3):0,f=Object.prototype.hasOwnProperty.call(L.fd,name)?L.fd[name]:null;
+  var F=f&&f.n?(f.m*f.n+G*2)/(f.n+2):G;
+  return Math.min(2,Math.max(0.5,Math.exp(F)));
+}
+function learnFromScan(sc){
+  if(!sc||!sc.fromMl||!sc.est)return 0;
+  var L=learnRead(),n=0;
+  sc.sel.forEach(function(s){
+    var raw=sc.est[s.f],f=FOODS[s.f];
+    if(!raw||!f||!(s.g>0))return;
+    var x=Math.max(-1.5,Math.min(1.5,Math.log(s.g/raw)));
+    var d=Object.prototype.hasOwnProperty.call(L.fd,f[0])?L.fd[f[0]]:(L.fd[f[0]]={n:0,m:0});
+    d.n=Math.min(d.n+1,20);d.m+=(x-d.m)/d.n;
+    L.gl.n=Math.min(L.gl.n+1,40);L.gl.m+=(x-L.gl.m)/L.gl.n;n++;
+  });
+  if(n)learnWrite(L);
+  return n;
+}
+function habitCounts(){var c={};(S.meals||[]).forEach(function(m){(m.items||[]).forEach(function(i){if(i&&i.n)c[i.n]=(c[i.n]||0)+1;});});return c;}
 function mlFam(j){return (ML_ROWS[FOODS[j][0]]||[])[2]||('x'+j);}
-function mlPlan(probs,plateCm){
+function mlPlan(probs,plateCm,learn,habits){
   var F=FOODS.length,T=probs.length-1,share=new Float32Array(F),whole=probs[0],j,t;
   for(t=1;t<=T;t++)for(j=0;j<F;j++)share[j]+=probs[t][j]/T;
   var cov=0;for(j=0;j<F;j++)cov+=share[j];      /* part du carré reconnue comme nourriture, de 0 à 1 */
+  var hb=habits||{};                              /* léger a priori : les aliments déjà mangés souvent sont un peu favorisés (×1,5 au plus) */
+  for(j=0;j<F;j++){var hc=hb[FOODS[j][0]]||0;if(hc)share[j]*=1+0.5*Math.min(1,hc/8);}
   var fam={};
   for(j=0;j<F;j++){
     if(share[j]<0.004)continue;
@@ -754,16 +801,18 @@ function mlPlan(probs,plateCm){
     var ga=(x.s/sum)*area*L2*gcm;
     var g=Math.pow(Math.max(ga,1),0.6)*Math.pow(port,0.4);   /* on rapproche l'estimation de la portion usuelle */
     g=Math.min(Math.max(g,0.4*port),2.5*port);
-    return {f:x.f,g:Math.max(5,Math.round(g/5)*5),s:x.s/sum};
+    var raw=Math.max(5,Math.round(g/5)*5);                    /* estimation brute, sert à apprendre de vos corrections */
+    var cg=Math.min(Math.max(g*learnFactor(f[0],learn),0.25*port),3.5*port);
+    return {f:x.f,g:Math.max(5,Math.round(cg/5)*5),raw:raw,s:x.s/sum};
   });
   var chosen={};sel.forEach(function(x){chosen[x.f]=1;});
   var order=[];for(j=0;j<F;j++)order.push(j);
   order.sort(function(a,b){return whole[b]-whole[a];});
-  return {sel:sel,alts:order.filter(function(i){return !chosen[i];}).slice(0,6),coverage:cov,weak:cov<0.2&&whole[top]<0.25};
+  return {sel:sel,alts:order.filter(function(i){return !chosen[i];}).slice(0,6),coverage:cov,weak:cov<0.2&&whole[top]<0.25,learned:(learn&&learn.gl&&learn.gl.n)||0};
 }
 
 var EMB_KEY='assiette.clip.txt.v1';
-function embSig(){var h=0,t=ML_PROMPTS.join('|');for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;return h;}
+function embSig(){var h=0,t=ML_ALLTXT.join('|');for(var i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;return h;}
 function f32ToB64(a){var u=new Uint8Array(a.buffer,a.byteOffset,a.byteLength),t='';for(var i=0;i<u.length;i+=0x8000)t+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(t);}
 function b64ToF32(b){var t=atob(b),u=new Uint8Array(t.length);for(var i=0;i<t.length;i++)u[i]=t.charCodeAt(i);return new Float32Array(u.buffer);}
 function embRead(){
@@ -809,17 +858,17 @@ async function mlLoad(onStatus){
       onStatus('Préparation de la liste d’aliments, une seule fois…',0);
       var tok=await tf.AutoTokenizer.from_pretrained(ML_MODEL,{progress_callback:prog});
       var txt=await mlFrom(tf.CLIPTextModelWithProjection,prog);
-      var n=ML_PROMPTS.length,all=null,dim=0,CH=16;
+      var n=ML_ALLTXT.length,all=null,dim=0,CH=16;
       for(var i=0;i<n;i+=CH){
-        var out=await txt(tok(ML_PROMPTS.slice(i,i+CH),{padding:true,truncation:true}));
+        var out=await txt(tok(ML_ALLTXT.slice(i,i+CH),{padding:true,truncation:true}));
         var te=out.text_embeds;dim=te.dims[1];
         if(!all)all=new Float32Array(n*dim);
         all.set(te.data,i*dim);
         onStatus('Préparation de la liste d’aliments… '+Math.min(100,Math.round((i+CH)/n*100))+' %',(i+CH)/n);
       }
-      mlNormRows(all,n,dim);
+      var avg=mlAvgRows(all,ML_T.counts,dim);
       try{if(txt.dispose)await txt.dispose();}catch(e){}
-      ML.emb=all;ML.dim=dim;embWrite(all,dim);
+      ML.emb=avg;ML.dim=dim;embWrite(avg,dim);
     })();
   }
   try{await ML.loading;}catch(e){ML.loading=null;ML.vis=null;ML.emb=null;throw e;}
@@ -839,7 +888,7 @@ function mlTiles(bmp){
 async function mlRecognize(bmp,plate){
   var inp=await ML.proc(mlTiles(bmp)),out=await ML.vis(inp),ie=out.image_embeds,dim=ie.dims[1],N=ie.dims[0];
   var img=new Float32Array(ie.data);mlNormRows(img,N,dim);
-  return mlPlan(mlProbs(img,ML.emb,N,ML_PROMPTS.length,dim),plate);
+  return mlPlan(mlProbs(img,ML.emb,N,ML_PROMPTS.length,dim),plate,learnRead(),habitCounts());
 }
 function setStatus(t,p){
   if(S.scan)S.scan.status=t;
@@ -856,7 +905,7 @@ async function runMl(sc){
     await new Promise(function(r){setTimeout(r,30);});
     var res=await mlRecognize(sc.bmp,S.settings.plate||26);
     if(S.scan!==sc||mlRunId!==my)return;
-    sc.sel=res.sel.map(function(x){return {f:x.f,g:x.g};});sc.alts=res.alts;sc.fromMl=true;sc.weak=!!res.weak;sc.phase='local';
+    sc.sel=res.sel.map(function(x){return {f:x.f,g:x.g};});sc.est={};res.sel.forEach(function(x){sc.est[x.f]=x.raw;});sc.learned=res.learned||0;sc.alts=res.alts;sc.fromMl=true;sc.weak=!!res.weak;sc.phase='local';
   }catch(e){
     if(S.scan!==sc||mlRunId!==my)return;
     sc.phase='error';
@@ -1034,6 +1083,7 @@ function viewSettings(){
   var h='<div class="shead" style="margin-top:8px"><h2 style="font-size:26px;font-weight:900;font-stretch:75%;text-transform:uppercase">Objectifs</h2><button class="btn ghost sm" data-act="tab" data-tab="today">Retour</button></div>';
   h+='<div class="field"><label for="s-kcal">Calories par jour</label><input id="s-kcal" class="mono" type="number" inputmode="numeric" min="1200" max="5000" step="50" value="'+g.k+'" data-set="kcal"><small>Entre 1 200 et 5 000 kcal. Pour viser une perte ou une prise de poids, demandez conseil à un professionnel de santé.</small></div>';
   if(S.hasClaude===false)h+='<div class="field"><label for="s-plate">Diamètre de votre assiette (cm)</label><input id="s-plate" class="mono" type="number" inputmode="numeric" min="15" max="40" step="1" value="'+(Number(s.plate)||26)+'" data-set="plate"><small>Sert à estimer les poids depuis la photo (assiette plate : 24 à 28 cm). Mesurez-la une fois.</small></div>';
+  if(S.hasClaude===false){var LR=learnRead();h+='<div class="field"><span class="lab">Apprentissage sur cet appareil</span><small>'+(LR.gl.n?'L’app ajuste les poids d’après '+LR.gl.n+' correction'+(LR.gl.n>1?'s':'')+' mémorisée'+(LR.gl.n>1?'s':'')+' et vos aliments habituels. Rien ne quitte l’appareil.':'Rien de mémorisé pour l’instant : l’app ajustera ses estimations de poids d’après vos corrections et vos aliments habituels. Rien ne quitte l’appareil.')+'</small>'+(LR.gl.n?'<button class="btn sm" style="margin-top:8px" data-act="learnReset">Oublier ce qui a été appris</button>':'')+'</div>';}
   h+='<div class="field"><span class="lab" id="s-split-l">Répartition des macros</span><div class="chips" role="group" aria-labelledby="s-split-l">';
   Object.keys(SPLITS).forEach(function(k){h+='<button class="chip" data-act="split" data-v="'+k+'" aria-pressed="'+(s.split===k)+'">'+SPLITS[k][3]+' '+SPLITS[k][0]+'/'+SPLITS[k][1]+'/'+SPLITS[k][2]+'</button>';});
   h+='</div><small>Protéines / glucides / lipides, en % des calories.</small></div>';
@@ -1067,7 +1117,7 @@ function renderView(){
 function renderAll(){renderSync();renderView();renderSheet();}
 
 /* ---------- feuilles : scan et détail ---------- */
-function newScan(){return {phase:'pick',blob:null,url:null,thumb:'',text:'',name:'',type:guessType(),items:[],scale:1,conf:'',note:'',ctl:null,err:'',refine:'',mode:'ai',sel:[],q:'',alts:[],fromMl:false,weak:false,bmp:null,man:{name:'',k:'',pr:'',gl:'',li:'',fi:''},status:''};}
+function newScan(){return {phase:'pick',blob:null,url:null,thumb:'',text:'',name:'',type:guessType(),items:[],scale:1,conf:'',note:'',ctl:null,err:'',refine:'',mode:'ai',sel:[],q:'',alts:[],fromMl:false,weak:false,est:null,learned:0,bmp:null,man:{name:'',k:'',pr:'',gl:'',li:'',fi:''},status:''};}
 function confBlock(c){
   var lv={haute:3,moyenne:2,faible:1}[c];if(!lv)return '';
   var t={haute:'Estimation fiable',moyenne:'Estimation moyenne',faible:'Estimation approximative'}[c];
@@ -1103,7 +1153,7 @@ function sheetScan(sc){
     h+='<h3 style="font-size:20px;font-weight:800;margin:8px 0">'+(sc.phase==='notfood'?'Pas de repas repéré':'L’analyse n’a pas abouti')+'</h3><p class="note" style="font-size:16px">'+esc(sc.phase==='notfood'?sc.note:sc.err)+'</p><div class="stack">'+(sc.phase==='error'?'<button class="btn primary" data-act="retry">Réessayer</button>':'')+'<button class="btn" data-act="local">'+(S.hasClaude===false?'Composer avec la liste d’aliments':'Composer sans Claude')+'</button><button class="btn" data-act="again">Choisir une autre photo'+(S.hasClaude===false?'':' ou décrire')+'</button></div>';
   }else if(sc.phase==='local'){
     h+=sc.url?'<div class="scanimg"><img src="'+esc(sc.url)+'" alt="Photo du repas"></div><div class="two" style="margin-bottom:6px"><button class="btn sm" style="width:100%" data-act="cam">Reprendre</button><button class="btn sm" style="width:100%" data-act="gal">Autre photo</button></div>':'<p class="hint" style="margin:4px 0 8px">Photo facultative : seule une miniature est gardée avec le repas.</p><div class="two"><button class="btn" data-act="cam">'+ICON.camS+' Photo</button><button class="btn" data-act="gal">'+ICON.img+' Galerie</button></div>';
-    if(sc.fromMl)h+='<p class="note" style="margin:10px 0">'+(sc.weak?'Je n’ai pas reconnu clairement de nourriture : vérifiez la photo (assiette entière, de dessus, bien éclairée) ou ajoutez les aliments à la main. ':'Estimation faite sur votre appareil, sans envoi de la photo. ')+'Elle reste approximative : retirez ce qui est faux et réglez chaque poids.</p>';
+    if(sc.fromMl)h+='<p class="note" style="margin:10px 0">'+(sc.weak?'Je n’ai pas reconnu clairement de nourriture : vérifiez la photo (assiette entière, de dessus, bien éclairée) ou ajoutez les aliments à la main. ':'Estimation faite sur votre appareil, sans envoi de la photo. ')+(sc.learned?'Poids ajustés d’après vos corrections précédentes. ':'')+'Elle reste approximative : retirez ce qui est faux et réglez chaque poids.</p>';
     var pB='<div class="field"><label for="l-name">Nom du repas (facultatif)</label><input id="l-name" type="text" maxlength="60" value="'+esc(sc.name)+'" data-bind="rName" placeholder="ex. Déjeuner au bureau"></div>';
     var pC=typeChips(sc.type,'type');
     var pD='<div class="field" style="margin-top:18px"><label for="fd-q">Ajouter un aliment</label><input id="fd-q" type="text" autocomplete="off" autocapitalize="off" placeholder="pain, riz, poulet, pomme…" value="'+esc(sc.q)+'" data-bind="fdQ"></div><div id="fd-res">'+resultsHTML(sc.q)+'</div>';
@@ -1312,11 +1362,12 @@ var A={
   gal:function(){document.getElementById('fileGal').click();},
   mlcam:function(){var sc=S.scan;if(!sc)return;sc.mode='ml';document.getElementById('fileCam').click();},
   mlgal:function(){var sc=S.scan;if(!sc)return;sc.mode='ml';document.getElementById('fileGal').click();},
+  learnReset:function(){learnWrite({gl:{n:0,m:0},fd:{}});toast('L’app a oublié ce qu’elle avait appris de vos corrections.');renderView();},
   textEstimate:function(){if(S.scan&&S.scan.text.trim().length>=3){S.scan.blob=null;S.scan.thumb='';analyze();}},
   manual:function(){S.scan.phase='manual';renderSheet();},
   cancel:function(){var sc=S.scan;if(!sc)return;mlRunId++;if(sc.ctl)sc.ctl.abort();stopMsgs();if(sc.url)URL.revokeObjectURL(sc.url);sc.url=null;sc.blob=null;sc.phase='pick';renderSheet();},
   retry:function(){var sc=S.scan;if(sc&&sc.mode==='ml'){if(sc.bmp)runMl(sc);else A.again();}else analyze();},
-  again:function(){var sc=S.scan;if(!sc)return;mlRunId++;if(sc.url)URL.revokeObjectURL(sc.url);if(sc.bmp&&sc.bmp.close){try{sc.bmp.close();}catch(e){}}sc.bmp=null;sc.alts=[];sc.fromMl=false;sc.weak=false;sc.url=null;sc.blob=null;sc.thumb='';sc.items=[];sc.name='';sc.refine='';sc.mode='ai';sc.sel=[];sc.q='';sc.phase='pick';renderSheet();},
+  again:function(){var sc=S.scan;if(!sc)return;mlRunId++;if(sc.url)URL.revokeObjectURL(sc.url);if(sc.bmp&&sc.bmp.close){try{sc.bmp.close();}catch(e){}}sc.bmp=null;sc.alts=[];sc.fromMl=false;sc.weak=false;sc.est=null;sc.learned=0;sc.url=null;sc.blob=null;sc.thumb='';sc.items=[];sc.name='';sc.refine='';sc.mode='ai';sc.sel=[];sc.q='';sc.phase='pick';renderSheet();},
   local:function(){var sc=S.scan;if(!sc)return;sc.mode='local';sc.phase='local';renderSheet();},
   fdAdd:function(el){
     var sc=S.scan,f=Number(el.dataset.f);if(!sc||!FOODS[f])return;
@@ -1332,6 +1383,7 @@ var A={
     if(!items.length){toast('Ajoutez au moins un aliment, avec un poids supérieur à 0 g.');return;}
     sc.items=items;sc.scale=1;sc.conf='';sc.note='';
     if(!str(sc.name,60))sc.name=str(items.slice(0,3).map(function(i){return i.n.split(' (')[0];}).join(', '),60);
+    learnFromScan(sc);
     saveScan();
   },
   type:function(el){S.scan.type=el.dataset.v;renderSheet();},

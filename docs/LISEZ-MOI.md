@@ -44,6 +44,20 @@ Installer : Android/Chrome → menu ⋮ → *Installer l'application* ; iPhone/S
 - Les valeurs nutritionnelles de la base intégrée sont des moyennes indicatives (pour 100 g tels que mangés), non vérifiées une à une. Pour un suivi médical, comparez-les à la table Ciqual de l'Anses.
 - Cet outil aide à garder des repères ; il ne remplace pas l'avis d'un professionnel de santé.
 
+## Précision mesurée sur de vraies photos
+
+Le modèle n'est pas « entraîné » ici : CLIP est utilisé tel quel (zéro-shot), car un vrai entraînement demande des milliers de photos étiquetées et un GPU. Ce qui a été fait : un **banc d'essai** automatique (dossier `bench/`, lancé par GitHub Actions) qui mesure la reconnaissance sur de vraies photos du jeu Food-101 et sert à choisir la formulation des requêtes envoyées au modèle.
+
+- Protocole : 22 plats de Food-101 qui existent dans la base de l'app ; chaque photo est classée parmi 208 candidats (les 198 aliments + 10 fonds de photo). Les réglages ont été choisis sur 528 photos (jeu « DEV »), puis vérifiés sur **880 autres photos jamais regardées** (jeu « TEST »). Seuls les chiffres du jeu TEST comptent.
+- Résultat sur TEST : le bon plat est en tête dans **76,9 %** des cas avec les requêtes retenues, contre 74,0 % avec la formulation initiale (+3,0 points, intervalle à 95 % : +1,5 à +4,4). Le bon plat est dans les 3 premières propositions dans 89,4 % des cas (pas de différence entre les deux). Sur le jeu DEV on obtenait 84 % : c'est le chiffre optimiste d'un jeu sur lequel on a réglé, pas celui à retenir.
+- Points faibles mesurés : le hamburger (23/40, pris pour un steak haché), le houmous (20/40), le porc et le saumon grillés (22 et 24/40, confondus avec poulet ou bœuf), le steak (26/40, pris pour du porc). Pour ces plats, utilisez les « Autres propositions ».
+- À savoir : photos de plats de restaurant, 22 plats sur 198 ; modèle PyTorch en pleine précision, alors que l'app utilise une version quantifiée (légèrement moins précise, non mesurée). Des descriptions réécrites à la main pour corriger les confusions ont fait **baisser** les scores sur les deux jeux : elles n'ont pas été retenues.
+- **Les grammes n'ont pas pu être mesurés** (aucun jeu de photos avec poids réels disponible) : ne comptez pas dessus mieux que les 30 à 50 % d'erreur indiqués plus haut.
+
+## L'app apprend de vos corrections (sur votre appareil)
+
+Quand vous enregistrez un repas scanné, l'app compare les grammes qu'elle proposait à ceux que vous avez validés et ajuste ses prochaines estimations : d'abord par aliment, puis de façon globale. Elle favorise aussi légèrement (jusqu'à ×1,5) les aliments que vous mangez souvent. Rien ne quitte l'appareil. Réglages > « Oublier ce qui a été appris » remet tout à zéro. Cet effet n'a pas pu être mesuré hors ligne : il se vérifiera à l'usage, après quelques repas corrigés.
+
 ## Ce qui a été testé, et ce qui ne l'a pas été
 
 Testé : la logique de calcul (fusion des aliments voisins, bornes, effet du diamètre d'assiette, cache), l'interface dans un vrai Chrome avec une bibliothèque simulée (flux complet photo → résultat → journal, échec réseau puis nouvel essai, installation du service worker), le fonctionnement hors ligne du service worker.

@@ -20,4 +20,4 @@ Un APK est construit automatiquement par GitHub (onglet [Actions](https://github
 2. Ouvrez le fichier téléchargé et autorisez l'installation depuis votre navigateur quand Android le demande. Un avertissement Play Protect est normal : l'app n'est pas sur le Play Store.
 3. Pour installer une version plus récente, désinstallez d'abord l'ancienne (chaque APK est signé avec une clé de test propre à sa construction). Sauvegardez avant votre journal avec « Copier mon journal » dans les réglages.
 
-Détails, précision attendue et limites : [`docs/LISEZ-MOI.md`](docs/LISEZ-MOI.md).
+Précision mesurée (banc d'essai `bench/` sur 880 photos de test : 76,9 % de plats reconnus en tête, 89,4 % dans les 3 premiers), limites et apprentissage sur l'appareil : [`docs/LISEZ-MOI.md`](docs/LISEZ-MOI.md).
