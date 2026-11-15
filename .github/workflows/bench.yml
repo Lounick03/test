@@ -1,0 +1,38 @@
+name: Banc d'essai de la reconnaissance
+
+# Mesure la précision de CLIP sur de vraies photos de plats (Food-101) en classant parmi les aliments de l'app,
+# et compare plusieurs formulations de requêtes. À lancer à la main (Actions > Run workflow) ou quand le script change.
+on:
+  workflow_dispatch:
+  push:
+    branches: [test]
+    paths:
+      - 'bench/bench.py'
+      - 'bench/classes.json'
+      - '.github/workflows/bench.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Installer les dépendances
+        run: |
+          pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
+          pip install --quiet transformers datasets pillow numpy
+      - name: Lancer le banc d'essai
+        run: python bench/bench.py 2>&1 | tee bench/log.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: bench-resultats
+          path: |
+            bench/results.json
+            bench/log.txt

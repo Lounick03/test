@@ -1,0 +1,1204 @@
+{
+"foods": [
+{
+"name": "Pain baguette",
+"desc": "a piece of baguette bread",
+"type": "B",
+"fam": "pain"
+},
+{
+"name": "Pain complet",
+"desc": "slices of whole wheat bread",
+"type": "B",
+"fam": "pain"
+},
+{
+"name": "Pain de mie",
+"desc": "slices of sandwich bread",
+"type": "B",
+"fam": "pain"
+},
+{
+"name": "Biscotte",
+"desc": "rusks, crispbread toast",
+"type": "B",
+"fam": "biscotte"
+},
+{
+"name": "Croissant",
+"desc": "a croissant",
+"type": "B",
+"fam": "croissant"
+},
+{
+"name": "Pain au chocolat",
+"desc": "a pain au chocolat pastry",
+"type": "B",
+"fam": "croissant"
+},
+{
+"name": "Flocons d’avoine",
+"desc": "a bowl of oatmeal porridge",
+"type": "F",
+"fam": "avoine"
+},
+{
+"name": "Céréales du petit-déjeuner",
+"desc": "a bowl of breakfast cereal with milk",
+"type": "F",
+"fam": "cereales"
+},
+{
+"name": "Muesli",
+"desc": "a bowl of muesli",
+"type": "F",
+"fam": "cereales"
+},
+{
+"name": "Riz blanc cuit",
+"desc": "cooked white rice",
+"type": "F",
+"fam": "riz"
+},
+{
+"name": "Riz complet cuit",
+"desc": "cooked brown rice",
+"type": "F",
+"fam": "riz"
+},
+{
+"name": "Pâtes cuites (spaghetti, penne…)",
+"desc": "cooked pasta",
+"type": "F",
+"fam": "pates"
+},
+{
+"name": "Pâtes complètes cuites",
+"desc": "whole wheat pasta",
+"type": "F",
+"fam": "pates"
+},
+{
+"name": "Semoule cuite",
+"desc": "couscous",
+"type": "F",
+"fam": "semoule"
+},
+{
+"name": "Quinoa cuit",
+"desc": "cooked quinoa",
+"type": "F",
+"fam": "quinoa"
+},
+{
+"name": "Pommes de terre vapeur",
+"desc": "boiled potatoes",
+"type": "F",
+"fam": "pdt"
+},
+{
+"name": "Purée de pommes de terre",
+"desc": "mashed potatoes",
+"type": "F",
+"fam": "pdt"
+},
+{
+"name": "Frites",
+"desc": "french fries",
+"type": "F",
+"fam": "frites"
+},
+{
+"name": "Patate douce cuite",
+"desc": "baked sweet potato",
+"type": "F",
+"fam": "patatedouce"
+},
+{
+"name": "Lentilles cuites",
+"desc": "cooked lentils",
+"type": "F",
+"fam": "lentilles"
+},
+{
+"name": "Pois chiches cuits",
+"desc": "chickpeas",
+"type": "F",
+"fam": "poischiches"
+},
+{
+"name": "Haricots rouges cuits",
+"desc": "red kidney beans",
+"type": "F",
+"fam": "hrouges"
+},
+{
+"name": "Haricots blancs cuits",
+"desc": "white beans",
+"type": "F",
+"fam": "hblancs"
+},
+{
+"name": "Nouilles de riz cuites",
+"desc": "rice noodles",
+"type": "F",
+"fam": "nouilles"
+},
+{
+"name": "Nouilles de blé cuites",
+"desc": "wheat noodles, ramen noodles",
+"type": "F",
+"fam": "nouilles"
+},
+{
+"name": "Haricots verts cuits",
+"desc": "green beans",
+"type": "V",
+"fam": "hverts"
+},
+{
+"name": "Brocoli cuit",
+"desc": "steamed broccoli",
+"type": "V",
+"fam": "brocoli"
+},
+{
+"name": "Carottes cuites",
+"desc": "cooked carrots",
+"type": "V",
+"fam": "carotte"
+},
+{
+"name": "Carottes crues",
+"desc": "raw grated carrots, carrot sticks",
+"type": "R",
+"fam": "carotte"
+},
+{
+"name": "Tomate crue",
+"desc": "sliced tomatoes",
+"type": "R",
+"fam": "tomate"
+},
+{
+"name": "Salade verte",
+"desc": "green salad, lettuce leaves",
+"type": "L",
+"fam": "salade"
+},
+{
+"name": "Concombre",
+"desc": "sliced cucumber",
+"type": "R",
+"fam": "concombre"
+},
+{
+"name": "Courgette cuite",
+"desc": "cooked zucchini",
+"type": "V",
+"fam": "courgette"
+},
+{
+"name": "Aubergine cuite",
+"desc": "roasted eggplant",
+"type": "V",
+"fam": "aubergine"
+},
+{
+"name": "Poivron cru",
+"desc": "sliced bell pepper",
+"type": "R",
+"fam": "poivron"
+},
+{
+"name": "Champignons cuits",
+"desc": "sauteed mushrooms",
+"type": "V",
+"fam": "champignon"
+},
+{
+"name": "Épinards cuits",
+"desc": "cooked spinach",
+"type": "V",
+"fam": "epinard"
+},
+{
+"name": "Petits pois cuits",
+"desc": "green peas",
+"type": "V",
+"fam": "petitspois"
+},
+{
+"name": "Maïs en conserve",
+"desc": "sweet corn kernels",
+"type": "V",
+"fam": "mais"
+},
+{
+"name": "Ratatouille",
+"desc": "ratatouille, stewed vegetables",
+"type": "D",
+"fam": "ratatouille"
+},
+{
+"name": "Soupe de légumes",
+"desc": "a bowl of vegetable soup",
+"type": "Q",
+"fam": "soupe"
+},
+{
+"name": "Avocat",
+"desc": "sliced avocado",
+"type": "R",
+"fam": "avocat"
+},
+{
+"name": "Pomme",
+"desc": "an apple",
+"type": "U",
+"fam": "pomme"
+},
+{
+"name": "Banane",
+"desc": "a banana",
+"type": "U",
+"fam": "banane"
+},
+{
+"name": "Orange",
+"desc": "an orange",
+"type": "U",
+"fam": "orange"
+},
+{
+"name": "Clémentine",
+"desc": "a mandarin orange, clementine",
+"type": "U",
+"fam": "orange"
+},
+{
+"name": "Fraises",
+"desc": "strawberries",
+"type": "U",
+"fam": "fraise"
+},
+{
+"name": "Raisin",
+"desc": "a bunch of grapes",
+"type": "U",
+"fam": "raisin"
+},
+{
+"name": "Poire",
+"desc": "a pear",
+"type": "U",
+"fam": "poire"
+},
+{
+"name": "Pêche / nectarine",
+"desc": "a peach",
+"type": "U",
+"fam": "peche"
+},
+{
+"name": "Kiwi",
+"desc": "kiwi fruit",
+"type": "U",
+"fam": "kiwi"
+},
+{
+"name": "Ananas",
+"desc": "pineapple slices",
+"type": "U",
+"fam": "ananas"
+},
+{
+"name": "Melon",
+"desc": "melon slices",
+"type": "U",
+"fam": "melon"
+},
+{
+"name": "Pastèque",
+"desc": "watermelon slices",
+"type": "U",
+"fam": "pasteque"
+},
+{
+"name": "Compote de pommes (sans sucre ajouté)",
+"desc": "applesauce in a small bowl",
+"type": "Q",
+"fam": "compote"
+},
+{
+"name": "Amandes",
+"desc": "almonds",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Noix",
+"desc": "walnuts",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Noix de cajou",
+"desc": "cashew nuts",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Cacahuètes",
+"desc": "peanuts",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Beurre de cacahuète",
+"desc": "peanut butter on toast",
+"type": "G",
+"fam": "tartinade"
+},
+{
+"name": "Poulet grillé (blanc, sans peau)",
+"desc": "grilled chicken breast",
+"type": "M",
+"fam": "poulet"
+},
+{
+"name": "Poulet rôti (cuisse, avec peau)",
+"desc": "roast chicken leg",
+"type": "M",
+"fam": "poulet"
+},
+{
+"name": "Dinde cuite (escalope)",
+"desc": "turkey cutlet",
+"type": "M",
+"fam": "dinde"
+},
+{
+"name": "Steak haché 5 % cuit",
+"desc": "a ground beef patty",
+"type": "M",
+"fam": "steak"
+},
+{
+"name": "Steak haché 15 % cuit",
+"desc": "a hamburger steak patty",
+"type": "M",
+"fam": "steak"
+},
+{
+"name": "Bœuf grillé (steak, rumsteck)",
+"desc": "grilled beef steak",
+"type": "M",
+"fam": "boeuf"
+},
+{
+"name": "Porc cuit (filet, côte)",
+"desc": "a pork chop",
+"type": "M",
+"fam": "porc"
+},
+{
+"name": "Jambon blanc",
+"desc": "slices of ham",
+"type": "M",
+"fam": "jambon"
+},
+{
+"name": "Jambon cru",
+"desc": "slices of cured ham, prosciutto",
+"type": "M",
+"fam": "jambon"
+},
+{
+"name": "Saucisson sec",
+"desc": "slices of dry sausage, salami",
+"type": "M",
+"fam": "charcuterie"
+},
+{
+"name": "Saucisse de porc cuite",
+"desc": "grilled sausages",
+"type": "M",
+"fam": "saucisse"
+},
+{
+"name": "Lardons cuits",
+"desc": "fried bacon bits",
+"type": "M",
+"fam": "lardons"
+},
+{
+"name": "Œuf dur",
+"desc": "a hard boiled egg",
+"type": "M",
+"fam": "oeuf"
+},
+{
+"name": "Œufs brouillés",
+"desc": "scrambled eggs",
+"type": "M",
+"fam": "oeuf"
+},
+{
+"name": "Saumon cuit",
+"desc": "a salmon fillet",
+"type": "M",
+"fam": "saumon"
+},
+{
+"name": "Poisson blanc cuit (cabillaud, colin)",
+"desc": "a white fish fillet",
+"type": "M",
+"fam": "poisson"
+},
+{
+"name": "Thon au naturel (conserve, égoutté)",
+"desc": "canned tuna",
+"type": "M",
+"fam": "thon"
+},
+{
+"name": "Thon à l’huile (conserve, égoutté)",
+"desc": "canned tuna in oil",
+"type": "M",
+"fam": "thon"
+},
+{
+"name": "Sardines à l’huile (égouttées)",
+"desc": "sardines",
+"type": "M",
+"fam": "sardine"
+},
+{
+"name": "Crevettes cuites",
+"desc": "cooked shrimp",
+"type": "M",
+"fam": "crevette"
+},
+{
+"name": "Tofu nature",
+"desc": "tofu cubes",
+"type": "M",
+"fam": "tofu"
+},
+{
+"name": "Poudre de protéines (whey)",
+"desc": "a protein shake",
+"type": "Q",
+"fam": "whey"
+},
+{
+"name": "Lait demi-écrémé",
+"desc": "a glass of milk",
+"type": "Q",
+"fam": "lait"
+},
+{
+"name": "Lait entier",
+"desc": "a glass of whole milk",
+"type": "Q",
+"fam": "lait"
+},
+{
+"name": "Boisson végétale (soja nature)",
+"desc": "a glass of soy milk",
+"type": "Q",
+"fam": "lait"
+},
+{
+"name": "Yaourt nature",
+"desc": "plain yogurt in a bowl",
+"type": "Q",
+"fam": "yaourt"
+},
+{
+"name": "Yaourt grec nature",
+"desc": "greek yogurt",
+"type": "Q",
+"fam": "yaourt"
+},
+{
+"name": "Fromage blanc 0 %",
+"desc": "fromage blanc, white cheese in a bowl",
+"type": "Q",
+"fam": "yaourt"
+},
+{
+"name": "Skyr nature",
+"desc": "skyr yogurt",
+"type": "Q",
+"fam": "yaourt"
+},
+{
+"name": "Emmental",
+"desc": "slices of emmental cheese",
+"type": "C",
+"fam": "fromage"
+},
+{
+"name": "Camembert",
+"desc": "a wedge of camembert cheese",
+"type": "C",
+"fam": "fromage"
+},
+{
+"name": "Mozzarella",
+"desc": "fresh mozzarella cheese",
+"type": "C",
+"fam": "fromage"
+},
+{
+"name": "Parmesan",
+"desc": "grated parmesan cheese",
+"type": "C",
+"fam": "fromage"
+},
+{
+"name": "Beurre",
+"desc": "a slice of butter",
+"type": "G",
+"fam": "beurre"
+},
+{
+"name": "Crème fraîche épaisse",
+"desc": "a spoon of sour cream",
+"type": "G",
+"fam": "creme"
+},
+{
+"name": "Huile d’olive",
+"desc": "olive oil in a small bowl",
+"type": "G",
+"fam": "huile"
+},
+{
+"name": "Mayonnaise",
+"desc": "mayonnaise",
+"type": "G",
+"fam": "sauce"
+},
+{
+"name": "Ketchup",
+"desc": "ketchup",
+"type": "G",
+"fam": "sauce"
+},
+{
+"name": "Vinaigrette",
+"desc": "salad dressing",
+"type": "G",
+"fam": "sauce"
+},
+{
+"name": "Houmous",
+"desc": "hummus",
+"type": "G",
+"fam": "houmous"
+},
+{
+"name": "Olives",
+"desc": "olives",
+"type": "N",
+"fam": "olives"
+},
+{
+"name": "Chocolat noir (70 %)",
+"desc": "squares of dark chocolate",
+"type": "X",
+"fam": "chocolat"
+},
+{
+"name": "Chocolat au lait",
+"desc": "a milk chocolate bar",
+"type": "X",
+"fam": "chocolat"
+},
+{
+"name": "Pâte à tartiner",
+"desc": "chocolate hazelnut spread",
+"type": "G",
+"fam": "tartinade"
+},
+{
+"name": "Confiture",
+"desc": "jam on toast",
+"type": "G",
+"fam": "confiture"
+},
+{
+"name": "Miel",
+"desc": "honey",
+"type": "G",
+"fam": "miel"
+},
+{
+"name": "Sucre",
+"desc": "sugar cubes",
+"type": "G",
+"fam": "sucre"
+},
+{
+"name": "Biscuits secs",
+"desc": "cookies, butter biscuits",
+"type": "X",
+"fam": "biscuit"
+},
+{
+"name": "Gâteau / cake maison",
+"desc": "a slice of cake",
+"type": "X",
+"fam": "gateau"
+},
+{
+"name": "Crêpe nature",
+"desc": "crepes",
+"type": "X",
+"fam": "crepe"
+},
+{
+"name": "Glace (crème glacée)",
+"desc": "scoops of ice cream",
+"type": "X",
+"fam": "glace"
+},
+{
+"name": "Chips",
+"desc": "potato chips",
+"type": "X",
+"fam": "chips"
+},
+{
+"name": "Jus d’orange",
+"desc": "a glass of orange juice",
+"type": "Q",
+"fam": "jus"
+},
+{
+"name": "Soda (cola)",
+"desc": "a glass of cola soda",
+"type": "Q",
+"fam": "soda"
+},
+{
+"name": "Café noir sans sucre",
+"desc": "a cup of black coffee",
+"type": "Q",
+"fam": "cafe"
+},
+{
+"name": "Thé sans sucre",
+"desc": "a cup of tea",
+"type": "Q",
+"fam": "the"
+},
+{
+"name": "Bière",
+"desc": "a glass of beer",
+"type": "Q",
+"fam": "biere"
+},
+{
+"name": "Vin",
+"desc": "a glass of wine",
+"type": "Q",
+"fam": "vin"
+},
+{
+"name": "Pizza (margherita)",
+"desc": "a pizza",
+"type": "D",
+"fam": "pizza"
+},
+{
+"name": "Hamburger (fast-food)",
+"desc": "a hamburger",
+"type": "D",
+"fam": "burger"
+},
+{
+"name": "Sandwich jambon-beurre",
+"desc": "a ham sandwich on a baguette",
+"type": "D",
+"fam": "sandwich"
+},
+{
+"name": "Quiche lorraine",
+"desc": "a slice of quiche",
+"type": "D",
+"fam": "quiche"
+},
+{
+"name": "Lasagnes",
+"desc": "lasagna",
+"type": "D",
+"fam": "lasagnes"
+},
+{
+"name": "Spaghetti bolognaise",
+"desc": "spaghetti bolognese",
+"type": "D",
+"fam": "pates"
+},
+{
+"name": "Gratin dauphinois",
+"desc": "potato gratin",
+"type": "D",
+"fam": "gratin"
+},
+{
+"name": "Riz sauté (œuf, légumes)",
+"desc": "fried rice",
+"type": "D",
+"fam": "riz"
+},
+{
+"name": "Raviolis chinois (vapeur)",
+"desc": "steamed dumplings, gyoza",
+"type": "D",
+"fam": "raviolis"
+},
+{
+"name": "Sushi / maki",
+"desc": "sushi rolls",
+"type": "D",
+"fam": "sushi"
+},
+{
+"name": "Mangue",
+"desc": "sliced mango",
+"type": "U",
+"fam": "mangue"
+},
+{
+"name": "Papaye",
+"desc": "papaya slices",
+"type": "U",
+"fam": "papaye"
+},
+{
+"name": "Fruit de la passion",
+"desc": "passion fruit",
+"type": "U",
+"fam": "passion"
+},
+{
+"name": "Litchi",
+"desc": "lychee fruits",
+"type": "U",
+"fam": "litchi"
+},
+{
+"name": "Ramboutan",
+"desc": "rambutan",
+"type": "U",
+"fam": "litchi"
+},
+{
+"name": "Longane",
+"desc": "longan fruits",
+"type": "U",
+"fam": "litchi"
+},
+{
+"name": "Pitaya (fruit du dragon)",
+"desc": "dragon fruit pitaya",
+"type": "U",
+"fam": "pitaya"
+},
+{
+"name": "Grenade (grains)",
+"desc": "pomegranate seeds",
+"type": "U",
+"fam": "grenade"
+},
+{
+"name": "Goyave",
+"desc": "guava",
+"type": "U",
+"fam": "goyave"
+},
+{
+"name": "Kaki",
+"desc": "persimmon",
+"type": "U",
+"fam": "kaki"
+},
+{
+"name": "Jacquier (jackfruit)",
+"desc": "jackfruit",
+"type": "U",
+"fam": "jacquier"
+},
+{
+"name": "Durian",
+"desc": "durian",
+"type": "U",
+"fam": "durian"
+},
+{
+"name": "Carambole",
+"desc": "star fruit carambola slices",
+"type": "U",
+"fam": "carambole"
+},
+{
+"name": "Mangoustan",
+"desc": "mangosteen",
+"type": "U",
+"fam": "mangoustan"
+},
+{
+"name": "Corossol (soursop)",
+"desc": "soursop",
+"type": "U",
+"fam": "corossol"
+},
+{
+"name": "Pomme-cannelle",
+"desc": "custard apple sugar apple",
+"type": "U",
+"fam": "pommecannelle"
+},
+{
+"name": "Figue de Barbarie",
+"desc": "prickly pear cactus fruit",
+"type": "U",
+"fam": "figuebarbarie"
+},
+{
+"name": "Kumquat",
+"desc": "kumquats",
+"type": "U",
+"fam": "orange"
+},
+{
+"name": "Pomelo",
+"desc": "pomelo",
+"type": "U",
+"fam": "pamplemousse"
+},
+{
+"name": "Pamplemousse",
+"desc": "a grapefruit",
+"type": "U",
+"fam": "pamplemousse"
+},
+{
+"name": "Figue fraîche",
+"desc": "fresh figs",
+"type": "U",
+"fam": "figue"
+},
+{
+"name": "Datte (Medjool)",
+"desc": "medjool dates",
+"type": "N",
+"fam": "datte"
+},
+{
+"name": "Mangue séchée",
+"desc": "dried mango strips",
+"type": "N",
+"fam": "manguesech"
+},
+{
+"name": "Noix de coco (chair)",
+"desc": "fresh coconut pieces",
+"type": "N",
+"fam": "coco"
+},
+{
+"name": "Noix de coco râpée",
+"desc": "shredded desiccated coconut",
+"type": "N",
+"fam": "coco"
+},
+{
+"name": "Eau de coco",
+"desc": "a glass of coconut water",
+"type": "Q",
+"fam": "cocoliq"
+},
+{
+"name": "Lait de coco",
+"desc": "coconut milk in a bowl",
+"type": "Q",
+"fam": "cocoliq"
+},
+{
+"name": "Noix de macadamia",
+"desc": "macadamia nuts",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Noix de pécan",
+"desc": "pecan nuts",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Noix du Brésil",
+"desc": "brazil nuts",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Pistaches",
+"desc": "pistachios",
+"type": "N",
+"fam": "noix"
+},
+{
+"name": "Baies de goji séchées",
+"desc": "dried goji berries",
+"type": "N",
+"fam": "goji"
+},
+{
+"name": "Graines de chia",
+"desc": "chia seeds",
+"type": "N",
+"fam": "graines"
+},
+{
+"name": "Graines de sésame",
+"desc": "sesame seeds",
+"type": "N",
+"fam": "graines"
+},
+{
+"name": "Banane plantain cuite",
+"desc": "cooked plantain",
+"type": "F",
+"fam": "plantain"
+},
+{
+"name": "Alloco (banane plantain frite)",
+"desc": "fried plantain",
+"type": "F",
+"fam": "plantain"
+},
+{
+"name": "Manioc cuit",
+"desc": "boiled cassava",
+"type": "F",
+"fam": "manioc"
+},
+{
+"name": "Igname cuite",
+"desc": "boiled yam",
+"type": "F",
+"fam": "igname"
+},
+{
+"name": "Taro cuit",
+"desc": "boiled taro root",
+"type": "F",
+"fam": "taro"
+},
+{
+"name": "Gombo (okra) cuit",
+"desc": "cooked okra",
+"type": "V",
+"fam": "gombo"
+},
+{
+"name": "Pak-choï cuit",
+"desc": "cooked bok choy pak choi",
+"type": "V",
+"fam": "pakchoi"
+},
+{
+"name": "Edamame cuits",
+"desc": "edamame beans in pods",
+"type": "V",
+"fam": "edamame"
+},
+{
+"name": "Kimchi",
+"desc": "kimchi",
+"type": "V",
+"fam": "kimchi"
+},
+{
+"name": "Tempeh",
+"desc": "tempeh slices",
+"type": "M",
+"fam": "tempeh"
+},
+{
+"name": "Falafel",
+"desc": "falafel balls",
+"type": "M",
+"fam": "falafel"
+},
+{
+"name": "Riz basmati cuit",
+"desc": "cooked basmati rice",
+"type": "F",
+"fam": "riz"
+},
+{
+"name": "Riz gluant cuit",
+"desc": "sticky glutinous rice",
+"type": "F",
+"fam": "riz"
+},
+{
+"name": "Nouilles soba cuites",
+"desc": "cooked soba buckwheat noodles",
+"type": "F",
+"fam": "nouilles"
+},
+{
+"name": "Nouilles udon cuites",
+"desc": "udon noodles",
+"type": "F",
+"fam": "nouilles"
+},
+{
+"name": "Pain naan",
+"desc": "naan flatbread",
+"type": "B",
+"fam": "naan"
+},
+{
+"name": "Pain pita",
+"desc": "pita bread",
+"type": "B",
+"fam": "naan"
+},
+{
+"name": "Tortilla de blé (wrap)",
+"desc": "flour tortillas wraps",
+"type": "B",
+"fam": "tortilla"
+},
+{
+"name": "Tortilla de maïs",
+"desc": "corn tortillas",
+"type": "B",
+"fam": "tortilla"
+},
+{
+"name": "Miso",
+"desc": "miso paste",
+"type": "G",
+"fam": "miso"
+},
+{
+"name": "Sauce soja",
+"desc": "soy sauce in a small dish",
+"type": "G",
+"fam": "sauce"
+},
+{
+"name": "Sauce de poisson (nuoc-mâm)",
+"desc": "fish sauce",
+"type": "G",
+"fam": "sauce"
+},
+{
+"name": "Tahini (purée de sésame)",
+"desc": "tahini sesame paste",
+"type": "G",
+"fam": "tartinade"
+},
+{
+"name": "Guacamole",
+"desc": "guacamole",
+"type": "G",
+"fam": "guacamole"
+},
+{
+"name": "Taboulé",
+"desc": "tabbouleh salad",
+"type": "D",
+"fam": "taboule"
+},
+{
+"name": "Curry de poulet (lait de coco)",
+"desc": "chicken curry with coconut milk",
+"type": "D",
+"fam": "curry"
+},
+{
+"name": "Poulet tikka masala",
+"desc": "chicken tikka masala",
+"type": "D",
+"fam": "curry"
+},
+{
+"name": "Dal de lentilles",
+"desc": "lentil dal",
+"type": "D",
+"fam": "dal"
+},
+{
+"name": "Pad thaï",
+"desc": "pad thai noodles",
+"type": "D",
+"fam": "padthai"
+},
+{
+"name": "Nems (rouleau frit)",
+"desc": "fried spring rolls",
+"type": "D",
+"fam": "nems"
+},
+{
+"name": "Rouleaux de printemps (frais)",
+"desc": "fresh summer rolls rice paper",
+"type": "D",
+"fam": "nems"
+},
+{
+"name": "Poke bowl (saumon, riz)",
+"desc": "poke bowl with salmon and rice",
+"type": "D",
+"fam": "poke"
+},
+{
+"name": "Samoussa (viande)",
+"desc": "samosa",
+"type": "D",
+"fam": "samoussa"
+},
+{
+"name": "Couscous (semoule, légumes, viande)",
+"desc": "couscous with vegetables and meat",
+"type": "D",
+"fam": "couscous"
+},
+{
+"name": "Chili con carne",
+"desc": "chili con carne",
+"type": "D",
+"fam": "chili"
+},
+{
+"name": "Soupe miso",
+"desc": "a bowl of miso soup",
+"type": "Q",
+"fam": "soupe"
+}
+],
+"bg": [
+"an empty plate",
+"a wooden table",
+"a tablecloth",
+"a paper napkin",
+"cutlery, a fork and a knife",
+"a person’s hand",
+"a kitchen countertop",
+"a dark background",
+"an empty bowl",
+"an empty drinking glass"
+]
+}
