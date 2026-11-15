@@ -1,0 +1,18 @@
+{
+  "name": "Assiette — suivi alimentaire par photo",
+  "short_name": "Assiette",
+  "description": "Photographiez votre assiette : aliments, poids et calories sont estimés sur votre appareil, sans compte ni envoi de la photo.",
+  "lang": "fr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#E9EEEB",
+  "theme_color": "#13221C",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" },
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
