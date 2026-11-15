@@ -9,6 +9,7 @@ on:
     paths:
       - 'bench/bench.py'
       - 'bench/classes.json'
+      - 'bench/desc_v2.json'
       - '.github/workflows/bench.yml'
 
 permissions:
