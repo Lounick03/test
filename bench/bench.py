@@ -73,7 +73,7 @@ def text_emb(template_ids):
         per_t = []
         for t in template_ids:
             tok = proc(text=[TEMPLATES[t].format(d) for d in chunk], return_tensors='pt', padding=True, truncation=True)
-            e = model.get_text_features(**tok)
+            e = model.text_projection(model.text_model(**tok).pooler_output)
             per_t.append(e / e.norm(dim=-1, keepdim=True))
         m = torch.stack(per_t).mean(0)
         out.append(m / m.norm(dim=-1, keepdim=True))
@@ -102,7 +102,7 @@ for lab, lst in want.items():
     for j, b in enumerate(lst):
         img = Image.open(io.BytesIO(b)).convert('RGB')
         inp = proc(images=img, return_tensors='pt')
-        e = model.get_image_features(**inp)
+        e = model.visual_projection(model.vision_model(pixel_values=inp['pixel_values']).pooler_output)
         feats.append((e / e.norm(dim=-1, keepdim=True))[0])
         truth_sets.append({names.index(n) for n in MAP[lab]})
         halves.append(0 if j < PER_CLASS // 2 else 1)

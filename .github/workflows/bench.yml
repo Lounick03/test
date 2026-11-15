@@ -28,6 +28,7 @@ jobs:
           pip install --quiet torch --index-url https://download.pytorch.org/whl/cpu
           pip install --quiet transformers datasets pillow numpy
       - name: Lancer le banc d'essai
+        shell: bash
         run: python bench/bench.py 2>&1 | tee bench/log.txt
       - uses: actions/upload-artifact@v4
         if: always()
