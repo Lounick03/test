@@ -24,7 +24,7 @@ Test rapide sur ordinateur : `python3 -m http.server 8000` dans le dossier, puis
 
 - Le premier scan télécharge un modèle de reconnaissance (CLIP, version quantifiée) : **de l'ordre de 100 à 200 Mo, estimation non mesurée**, la barre de progression affiche la taille réelle. Faites-le en Wi-Fi.
 - Une fois téléchargé, il reste dans le cache du navigateur : les scans suivants fonctionnent **hors ligne**.
-- L'app ajoute un second téléchargement, plus court, la première fois : elle encode une fois la liste des 128 aliments, puis garde le résultat.
+- L'app ajoute un second téléchargement, plus court, la première fois : elle encode une fois la liste des 198 aliments, puis garde le résultat.
 - Les polices (Archivo, DM Mono) viennent de Google Fonts si le réseau est disponible ; sinon l'app utilise les polices du système.
 
 Installer : Android/Chrome → menu ⋮ → *Installer l'application* ; iPhone/Safari → Partager → *Sur l'écran d'accueil*.
@@ -37,7 +37,7 @@ Installer : Android/Chrome → menu ⋮ → *Installer l'application* ; iPhone/S
 
 ## Précision : ce qu'il faut savoir
 
-- La reconnaissance est « zéro-shot » : le modèle compare la photo à une description anglaise de chacun des 128 aliments de la base. Il se débrouille bien sur des aliments distincts et bien séparés dans l'assiette ; il hésite sur les plats mixtes (gratins, sautés, sauces), les aliments voisins (riz / semoule / quinoa) et ne voit pas ce qui est caché (huile, beurre, sauce).
+- La reconnaissance est « zéro-shot » : le modèle compare la photo à une description anglaise de chacun des 198 aliments de la base. Il se débrouille bien sur des aliments distincts et bien séparés dans l'assiette ; il hésite sur les plats mixtes (gratins, sautés, sauces), les aliments voisins (riz / semoule / quinoa) et ne voit pas ce qui est caché (huile, beurre, sauce).
 - Les grammes sont une **estimation grossière** : surface occupée × épaisseur moyenne par type d'aliment, ramenée vers une portion usuelle et bornée entre 0,4 et 2,5 fois cette portion. Comptez facilement 30 à 50 % d'erreur. Une seule photo ne donne pas la profondeur.
 - Pour de meilleurs résultats : photo **de dessus**, **assiette entière** remplissant presque toute la largeur, bonne lumière, et réglez le **diamètre de votre assiette** dans les réglages (par défaut 26 cm).
 - L'écran de résultat est conçu pour corriger : retirez les faux aliments, ajoutez-en via les « Autres propositions » ou la recherche, réglez chaque poids.
